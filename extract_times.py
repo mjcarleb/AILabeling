@@ -8,16 +8,13 @@ def get_bs_content(file_name):
     bs_content = bs(content, features="xml")
     return bs_content
 
-if __name__ == "__main__":
 
-    # label and value
-    time_dict = dict()
+def populate_times(root):
+
     found_time = False
-
-    elan_file_name = "data/Cactus 4_8_22_Satya_V3.eaf"
-    bs_content = get_bs_content(elan_file_name)
-    root = next(bs_content.children)
+    time_dict = dict()
     children = root.children
+
     for child in children:
 
         # stop looking after we found time specs
@@ -45,4 +42,19 @@ if __name__ == "__main__":
             except TypeError:
                 pass
 
-    print(f"Number of time segments = {len(time_dict.keys())}")
+    print(f"Number of time segments found = {len(time_dict.keys())}")
+    return time_dict
+
+
+def populate_annos(root):
+    pass
+
+
+if __name__ == "__main__":
+
+    elan_file_name = "data/Cactus 4_8_22_Satya_V3.eaf"
+    bs_content = get_bs_content(elan_file_name)
+    root = next(bs_content.children)
+
+    time_dict = populate_times(root)
+    anno_dict = populate_annos(root)
