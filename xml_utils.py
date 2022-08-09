@@ -47,14 +47,41 @@ def populate_times(root):
 
 
 def populate_annos(root):
-    pass
 
+    found_annos = False
+    annos_dict = dict()
+    children = root.children
 
-if __name__ == "__main__":
+    for child in children:
 
-    elan_file_name = "data/Cactus 4_8_22_Satya_V3.eaf"
-    bs_content = get_bs_content(elan_file_name)
-    root = next(bs_content.children)
+        # stop looking after we found time specs
+        if found_annos:
+            break
 
-    time_dict = populate_times(root)
-    anno_dict = populate_annos(root)
+        if child == "\n":
+            pass
+        else:
+            try:
+                l_contents = len(child.contents)
+                if child.contents == "\n":
+                    pass
+                else:
+                    for i in range(l_contents):
+                        if child.contents[i] == "\n":
+                            pass
+                        elif child.contents[i].name == "ANNOTATION":
+                            annotation_id = child.contents[i].contents[1].attrs["ANNOTATION_ID"]
+                            time_slot_ref1 = child.contents[i].contents[1].attrs["TIME_SLOT_REF1"]
+                            time_slot_ref2 = child.contents[i].contents[1].attrs["TIME_SLOT_REF2"]
+                            annotation_label = child.contents[i].contents[1].contents[1].contents[0]
+
+                            # annos dict will be keyed off of start time
+                            # annos dict will contain list anno_id, ending time slot and label
+                            annos_dict[time_slot_ref1] = [annotation_id, time_slot_ref2, annotation_label]
+                            found_annos = True
+
+            except TypeError:
+                pass
+
+    print(f"Number of annos found = {len(annos_dict.keys())}")
+    return annos_dict
