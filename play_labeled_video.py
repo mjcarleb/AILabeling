@@ -32,7 +32,7 @@ if __name__ == "__main__":
     frame_num = 0
     label = "none"
     stop_frame = -1
-    skip_to_frame = 800
+    skip_to_frame = 1100
 
     for i in range(skip_to_frame):
         _, _ = video.read()
@@ -40,7 +40,13 @@ if __name__ == "__main__":
 
     while (1):
 
-        ret, frame = video.read()
+        start_pause = 1200
+
+        if frame_num > start_pause:
+            ret, frame = video.read()
+        else:
+            ret, frame = video.read()
+
         frame_num += 1
         if frame_num == stop_frame:
             label = "none"
